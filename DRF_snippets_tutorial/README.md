@@ -3,6 +3,8 @@
 - python 3.6
 - pipenv
 
+> 官方教程中,urlpatterns里使用的是`url`,我这里已转化为`path`(django2.x)
+
 ***
 
 # 使用方法
