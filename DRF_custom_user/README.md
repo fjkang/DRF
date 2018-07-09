@@ -220,10 +220,10 @@ urlpatterns = [
 # user/urls.py
 from django.urls import path
 
-from .views import SigUp
+from .views import SignUp
 
 urlpatterns = [
-    path('signup/', SigUp.as_view(), name='signup'),
+    path('signup/', SignUp.as_view(), name='signup'),
 ]
 ```
 
@@ -240,7 +240,7 @@ from .forms import CustomUserCreationForm
 class SignUp(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
-    template_name = 'sigup.html'
+    template_name = 'signup.html'
     
 ```
 
@@ -326,7 +326,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('users/', include('users.urls')),
-    path('rest-auth/', include('rest-auth.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
 ]
 ```
 
