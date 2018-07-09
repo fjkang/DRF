@@ -418,7 +418,7 @@ urlpatterns = [
 ]
 ```
 
-这样,通过http://127.0.0.1:8000/api/v1/rest-auth的api进行
+这样,通过 http://127.0.0.1:8000/api/v1/rest-auth的api 进行
 - 登陆: http://127.0.0.1:8000/api/v1/rest-auth/login
 - 注册: http://127.0.0.1:8000/api/v1/rest-auth/registration
 - 登出: http://127.0.0.1:8000/api/v1/rest-auth/logout
