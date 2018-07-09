@@ -279,3 +279,140 @@ class CustomUserAdmin(UserAdmin):
 ```
 
 OK,更多详细信息可以查看[官方文档](https://docs.djangoproject.com/en/2.0/topics/auth/customizing/)
+
+
+====
+# 拓展DRF
+
+1. 安装`djangorestframework`和`django-rest-auth`,并创建`api`应用
+
+```bash
+pipenv install djangorestframework
+pipenv install django-rest-auth
+pipenv run py .\manage.py startapp api
+```
+
+2. 在`settings.py`中加入:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+
+    'api',
+    'users',
+]
+```
+
+3. 设置`api`的路由:
+- 在`djauth/urls.py`的配置
+
+```python
+# djauth/urls.py
+urlpatterns = [
+    ...
+    path('api/v1/', include('api.urls')),
+]
+```
+
+- 在`api/urls.py`的配置
+
+```python
+# api/urls.py
+from django.urls import path, include
+
+urlpatterns = [
+    path('users/', include('users.urls')),
+    path('rest-auth/', include('rest-auth.urls')),
+]
+```
+
+4. 创建users的`serializers.py`文件,写入:
+
+```python
+# users/serializers.py
+from rest_framework import serializers
+
+from .models import CustomUser
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'age')
+```
+
+5. 创建users的`views.py`的api处理方法:
+
+```python
+# users/views.py
+...
+from rest_framework.generics import ListCreateAPIView
+...
+from .models import CustomUser
+from .serializers import UserSerializer
+
+...
+
+class UserListView(ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+```
+
+6. 最后创建users的`urls.py`写入:
+
+```python
+# users/urls.py
+from .views import SignUp, UserListView
+
+urlpatterns = [
+    ...
+    path('', UserListView.as_view()),
+]
+```
+
+接着,就可以通过
+- http://127.0.0.1:8000/api/v1/users/
+- http://127.0.0.1:8000/api/v1/rest-auth/login/
+- http://127.0.0.1:8000/api/v1/rest-auth/logout/
+查看到对应api的接口了
+
+# django的allauth
+1. 首先安装`django-allauth`
+
+```bash
+pipenv install django-allauth
+```
+
+2. 修改`settings.py`的内容:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    ...
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_ID = 1
+```
+
+3. 进行数据库的更新:
+
+```bash
+pipenv run py .\manage.py migrate
+```
+
+4. 最后在`api/urls.py`中加上注册的路由
+
+```python
+# api/urls.py
+urlpatterns = [
+    ...
+    ('rest_auth.registration.urls')),
+]
+```
