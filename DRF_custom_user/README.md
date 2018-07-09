@@ -281,7 +281,8 @@ class CustomUserAdmin(UserAdmin):
 OK,更多详细信息可以查看[官方文档](https://docs.djangoproject.com/en/2.0/topics/auth/customizing/)
 
 
-====
+_ _ _
+
 # 拓展DRF
 
 1. 安装`djangorestframework`和`django-rest-auth`,并创建`api`应用
@@ -413,6 +414,11 @@ pipenv run py .\manage.py migrate
 # api/urls.py
 urlpatterns = [
     ...
-    ('rest_auth.registration.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]
 ```
+
+这样,通过http://127.0.0.1:8000/api/v1/rest-auth的api进行
+- 登陆: http://127.0.0.1:8000/api/v1/rest-auth/login
+- 注册: http://127.0.0.1:8000/api/v1/rest-auth/registration
+- 登出: http://127.0.0.1:8000/api/v1/rest-auth/logout
